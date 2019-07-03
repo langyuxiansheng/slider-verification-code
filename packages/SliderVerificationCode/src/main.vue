@@ -123,8 +123,8 @@ export default {
 
                         //3.成功解锁后的回调函数
                         setTimeout(() => {
-                            console.log('解锁成功');
                             this.$emit('change', success);
+                            // console.log('解锁成功');
                         }, 100);
                     }
                 };
