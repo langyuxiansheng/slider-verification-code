@@ -3,7 +3,7 @@
 
 ## 直接安装使用
 ```
-npm i vue-license-keyboard --save
+npm i slider-verification-code --save
 ```
 ```
 import SliderVerificationCode from 'slider-verification-code';
