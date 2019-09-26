@@ -42,7 +42,7 @@ methods:{
 }
 ```
 
-#### 3. pros 属性可选值
+#### 3. props 属性可选值
 ```
     icon: { //滑块图标
         type: [String],
