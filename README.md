@@ -31,6 +31,8 @@ Vue.use(SliderVerificationCode);
 
 ```
 <SliderVerificationCode v-model="value" />
+
+<SliderVerificationCode height="60px" sliderWidth="120px"  inactiveValue="未解锁" activeValue="已解锁" v-model="value"/>
 ```
 
 #### 2. 也可以使用 @change="handleChange"  进行回调
@@ -44,26 +46,38 @@ methods:{
 
 #### 3. pros 属性可选值
 ```
-    icon: { //滑块图标
-        type: [String],
-        default: null
-    },
-    content: { //滑块的文字
-        type: [String],
-        default: `请拖动滑块解锁`
-    },
-    height: { //高度
-        type: [String],
-        default: `40px`
-    },
-    background: { //高度
-        type: [String],
-        default: `#e8e8e8`
-    },
-    textColor: { //滑块的文字颜色
-        type: [String],
-        default: `#fff`
-    }
+icon: { //滑块图标
+    type: [String],
+    default: null
+},
+activeValue: { //滑块解锁后的值
+    type: [String,Boolean,Number,Object],
+    default: true
+},
+inactiveValue: { //滑块解锁前的值
+    type: [String,Boolean,Number,Object],
+    default: false
+},
+content: { //滑块的文字
+    type: [String],
+    default: `请拖动滑块解锁`
+},
+height: { //高度
+    type: [String],
+    default: `40px`
+},
+sliderWidth: { //滑块宽度
+    type: [String],
+    default: `40px`
+},
+background: { //高度
+    type: [String],
+    default: `#e8e8e8`
+},
+textColor: { //滑块的文字颜色
+    type: [String],
+    default: `#fff`
+}
 ```
 #### 4. solt用法
 ```
@@ -112,3 +126,16 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## 更新日志
+- 2019年7月09日 v1.0.0
+
+1. 建立项目,发布到npm
+
+- 2019年9月26日 v1.0.1
+
+1. 修复改变高度后滑块显示异常;
+2. 新增自定义解锁前后的值;
+3. 新增自定义滑块高度和宽度.
+4. v1.0.0的源码在 v1.0.0的分支上. 
+---

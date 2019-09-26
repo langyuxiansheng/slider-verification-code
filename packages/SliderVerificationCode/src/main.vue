@@ -6,7 +6,7 @@
                 {{ content }}
             </slot>
         </div>
-        <div class="slider">
+        <div class="slider" :style="{height,width:sliderWidth}">
             <slot v-if="icon" name="icon">
                 {{ icon }}
             </slot>
@@ -25,7 +25,7 @@ export default {
     },
     props: {
         isLock: { //解锁状态
-            type: [Boolean],
+            type: [String,Boolean,Number,Object],
             required: true,
             default: false
         },
@@ -33,11 +33,23 @@ export default {
             type: [String],
             default: null
         },
+        activeValue: { //滑块解锁后的值
+            type: [String,Boolean,Number,Object],
+            default: true
+        },
+        inactiveValue: { //滑块解锁前的值
+            type: [String,Boolean,Number,Object],
+            default: false
+        },
         content: { //滑块的文字
             type: [String],
             default: `请拖动滑块解锁`
         },
         height: { //高度
+            type: [String],
+            default: `40px`
+        },
+        sliderWidth: { //滑块宽度
             type: [String],
             default: `40px`
         },
@@ -77,7 +89,7 @@ export default {
             const text = this.selector('.text'); //文字
             const slider = this.selector('.slider');//滑块
             const distance = box.offsetWidth - slider.offsetWidth;//滑动成功的宽度（距离）
-            let success = false;//是否通过验证的标志
+            let success =  this.inactiveValue;//是否通过验证的标志
             //二、给滑块注册鼠标按下事件
             slider.onmousedown = (event) => {
                 //1.鼠标按下之前必须清除掉后面设置的过渡属性
@@ -116,14 +128,14 @@ export default {
                         background.style.backgroundColor = 'lightgreen';
 
                         //2.设置滑动成功后的状态
-                        success = true;
+                        success = this.activeValue;
                         //成功后，清除掉鼠标按下事件和移动事件（因为移动时并不会涉及到鼠标松开事件）
                         slider.onmousedown = null;
                         document.onmousemove = null;
 
                         //3.成功解锁后的回调函数
                         setTimeout(() => {
-                            this.$emit('change', success);
+                            this.$emit('change', this.activeValue);
                             // console.log('解锁成功');
                         }, 100);
                     }
@@ -132,7 +144,7 @@ export default {
                 //四、给文档注册鼠标松开事件
                 document.onmouseup = () => {
                     //如果鼠标松开时，滑到了终点，则验证通过
-                    if (success) return success;
+                    if (success == this.activeValue) return true;
                     //反之，则将滑块复位（设置了1s的属性过渡效果）
                     slider.style.left = 0;
                     background.style.width = 0;
@@ -152,6 +164,7 @@ export default {
     margin: 0px;
     padding: 0px;
     font-family: "微软雅黑";
+    box-sizing: border-box;
 }
 
 .app-drag {
