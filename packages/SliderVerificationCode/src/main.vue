@@ -160,7 +160,6 @@ export default {
             //二、给滑块注册鼠标按下事件
             slider.ontouchstart = (event) => {
                 const touch = event.changedTouches[0];
-                console.log(`object ontouchstart`,event);
                 //1.鼠标按下之前必须清除掉后面设置的过渡属性
                 slider.style.transition = null;
                 background.style.transition = null;
