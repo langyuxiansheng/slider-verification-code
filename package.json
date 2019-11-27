@@ -1,13 +1,13 @@
 {
     "name": "slider-verification-code",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "author": "yxs",
     "description": "基于vue开发的简单图片滑块验证码",
     "main":"lib/slider-verification-code.umd.min.js",
     "private": false,
     "license": "MIT",
     "scripts": {
-        "start": "vue-cli-service serve",
+        "dev": "vue-cli-service serve",
         "build": "vue-cli-service build",
         "lint": "vue-cli-service lint",
         "lib": "vue-cli-service build --target lib --name slider-verification-code --dest lib packages/index.js"

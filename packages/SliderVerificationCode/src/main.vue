@@ -155,6 +155,74 @@ export default {
                     document.onmouseup = null;
                 };
             };
+
+            /* 移动端  */
+            //二、给滑块注册鼠标按下事件
+            slider.ontouchstart = (event) => {
+                const touch = event.changedTouches[0];
+                console.log(`object ontouchstart`,event);
+                //1.鼠标按下之前必须清除掉后面设置的过渡属性
+                slider.style.transition = null;
+                background.style.transition = null;
+                //说明：clientX 事件属性会返回当事件被触发时，鼠标指针向对于浏览器页面(或客户区)的水平坐标。
+                //2.当滑块位于初始位置时，得到鼠标按下时的水平位置
+                const downX = touch.pageX;
+                console.log(`downX`,downX);
+                //三、给文档注册鼠标移动事件
+                document.ontouchmove = (e) => {
+                    const tev = e.changedTouches[0];
+                    //1.获取鼠标移动后的水平位置
+                    const moveX = tev.pageX;
+                    //2.得到鼠标水平位置的偏移量（鼠标移动时的位置 - 鼠标按下时的位置）
+                    let offsetX = moveX - downX;
+
+                    //3.在这里判断一下：鼠标水平移动的距离 与 滑动成功的距离 之间的关系
+                    if (offsetX > distance) {
+                        offsetX = distance;//如果滑过了终点，就将它停留在终点位置
+                    } else if (offsetX < 0) {
+                        offsetX = 0;//如果滑到了起点的左侧，就将它重置为起点位置
+                    }
+
+                    //4.根据鼠标移动的距离来动态设置滑块的偏移量和背景颜色的宽度
+                    slider.style.left = offsetX + 'px';
+                    background.style.width = offsetX + 'px';
+
+                    //如果鼠标的水平移动距离 = 滑动成功的宽度
+                    if (offsetX == distance) {
+                        //1.设置滑动成功后的样式
+                        text.innerHTML = '验证通过';
+                        text.style.color = '#fff';
+                        slider.innerHTML = '&radic;';
+                        slider.style.color = 'green';
+                        background.style.backgroundColor = 'lightgreen';
+                        //2.设置滑动成功后的状态
+                        success = this.activeValue;
+                        //成功后，清除掉鼠标按下事件和移动事件（因为移动时并不会涉及到鼠标松开事件）
+                        slider.ontouchstart = null;
+                        document.ontouchmove = null;
+
+                        //3.成功解锁后的回调函数
+                        setTimeout(() => {
+                            this.$emit('change', this.activeValue);
+                            // console.log('解锁成功');
+                        }, 100);
+                    }
+                };
+
+                //四、给文档注册鼠标松开事件
+                document.ontouchend = () => {
+                    //如果鼠标松开时，滑到了终点，则验证通过
+                    if (success == this.activeValue) return true;
+                    //反之，则将滑块复位（设置了1s的属性过渡效果）
+                    slider.style.left = 0;
+                    background.style.width = 0;
+                    slider.style.transition = 'left 1s ease';
+                    background.style.transition = 'width 1s ease';
+                    //只要鼠标松开了，说明此时不需要拖动滑块了，那么就清除鼠标移动和松开事件。
+                    document.ontouchmove = null;
+                    document.ontouchend = null;
+                };
+            };
         }
     }
 };
@@ -168,15 +236,15 @@ export default {
 }
 
 .app-drag {
-    height: 40px;
-    line-height: 40px;
+    height: 2.5rem;
+    line-height: 2.5rem;
     background-color: #e8e8e8;
     position: relative;
     margin: 0 auto;
 }
 
 .background {
-    width: 40px;
+    width: 2.5rem;
     height: 100%;
     position: absolute;
     background-color: #75CDF9;
@@ -191,8 +259,8 @@ export default {
 }
 
 .slider {
-    width: 40px;
-    height: 38px;
+    width: 2.5rem;
+    height: 2.375rem;
     position: absolute;
     border: 1px solid #ccc;
     cursor: move;
