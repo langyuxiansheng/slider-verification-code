@@ -17,6 +17,13 @@
     </div>
 </template>
 <script>
+const debounce = (function () {
+  let timer = 0
+  return function (callback, ms) {
+    clearTimeout(timer)
+    timer = setTimeout(callback, ms)
+  }
+})();
 export default {
     name: 'SliderVerificationCode',
     model: {
@@ -62,14 +69,27 @@ export default {
             default: `#fff`
         }
     },
+    watch:{
+        isLock(v){  //重置样式
+            !v && this.init();
+        }
+    },
     computed: {
         style() {
             const { height, background } = this;
             return { height, 'line-height': height, background };
+        },
+        resize (){
+            return document.body.clientWidth;
         }
     },
     mounted() {
         this.init();
+        window.onresize = ()=>{
+            debounce(()=>{
+                this.init();
+            },120);
+        };
     },
     methods: {
 
@@ -90,6 +110,12 @@ export default {
             const slider = this.selector('.slider');//滑块
             const distance = box.offsetWidth - slider.offsetWidth;//滑动成功的宽度（距离）
             let success =  this.inactiveValue;//是否通过验证的标志
+            // 初始化的时候 清除所有属性
+            slider.style.transition = null;
+            background.style.transition = null;
+            slider.style.left = 0 + 'px';
+            background.style.width = 0 + 'px';
+            text.innerHTML = this.content;
             //二、给滑块注册鼠标按下事件
             slider.onmousedown = (event) => {
                 //1.鼠标按下之前必须清除掉后面设置的过渡属性
@@ -166,7 +192,7 @@ export default {
                 //说明：clientX 事件属性会返回当事件被触发时，鼠标指针向对于浏览器页面(或客户区)的水平坐标。
                 //2.当滑块位于初始位置时，得到鼠标按下时的水平位置
                 const downX = touch.pageX;
-                console.log(`downX`,downX);
+                // console.log(`downX`,downX);
                 //三、给文档注册鼠标移动事件
                 document.ontouchmove = (e) => {
                     const tev = e.changedTouches[0];
