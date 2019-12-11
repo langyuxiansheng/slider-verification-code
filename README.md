@@ -2,10 +2,12 @@
 # 基于vue开发的简单图片滑块验证码
 
 ## 直接安装使用
-```
+
+```bash
 npm i slider-verification-code --save
 ```
-```
+
+```javascript
 import SliderVerificationCode from 'slider-verification-code';
 import 'slider-verification-code/lib/slider-verification-code.css';
 
@@ -29,14 +31,14 @@ Vue.use(SliderVerificationCode);
 
 #### 1. 直接使用v-model 进行绑定
 
-```
+```html
 <SliderVerificationCode v-model="value" />
 
 <SliderVerificationCode height="60px" sliderWidth="120px"  inactiveValue="未解锁" activeValue="已解锁" v-model="value"/>
 ```
 
 #### 2. 也可以使用 @change="handleChange"  进行回调
-```
+```javascript
 methods:{
     handleChange(value){
         console.log('您验证结果为:',value);
@@ -45,7 +47,7 @@ methods:{
 ```
 
 #### 3. props 属性可选值
-```
+```javascript
 icon: { //滑块图标
     type: [String],
     default: null
@@ -80,7 +82,7 @@ textColor: { //滑块的文字颜色
 }
 ```
 #### 4. solt用法
-```
+```html
 <SliderVerificationCode v-model="value">
     <template slot="content">
         {{ content }}
@@ -93,34 +95,34 @@ textColor: { //滑块的文字颜色
 
 ---
 
-```
+```bash
 ## 二次开发 下载项目
 
 ## Project setup  git clone https://github.com/langyuxiansheng/slider-verification-code.git
 ```
-```
+```bash
 cd slider-verification-code
 
 npm install
 ```
 
 ### Compiles and hot-reloads for development
-```
+```bash
 npm run dev
 ```
 
 ### Compiles and minifies for production
-```
+```bash
 npm run build
 ```
 
 ### Run your tests
-```
+```bash
 npm run test
 ```
 
 ### Lints and fixes files
-```
+```bash
 npm run lint
 ```
 
