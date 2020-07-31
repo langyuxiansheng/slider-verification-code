@@ -192,9 +192,11 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 3. 修复重置值之后,样式未初始化的bug;
 4. 感谢各位道友的反馈.o(*￣︶￣*)o
 
-- 2020年7月31日 v1.0.4
+- 2020年7月31日 v1.0.5
 
 1. 修复滑块重置后,部分样式没重置的bug;
 2. 增加了几个属性配置项,可以更灵活的配置;
 3. 感谢网友"weixin_49722066"的反馈.o(*￣︶￣*)o
+4. 感谢网友"tbejuan "的反馈.o(*￣︶￣*)o
+5. 修复 offsetWidth undefind 的bug;
 ---

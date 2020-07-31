@@ -142,7 +142,7 @@ export default {
             const background = this.selector('.background'); //背景
             const text = this.selector('.text'); //文字
             const slider = this.selector('.slider');//滑块
-            const distance = box.offsetWidth - slider.offsetWidth;//滑动成功的宽度（距离）
+            const distance = box.offsetWidth && slider.offsetWidth ? (box.offsetWidth - slider.offsetWidth) : 0 ; //滑动成功的宽度（距离）
             let success =  this.inactiveValue;//是否通过验证的标志
             // 初始化的时候 清除所有属性
             slider.style.transition = null;
