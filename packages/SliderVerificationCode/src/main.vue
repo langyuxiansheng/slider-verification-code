@@ -1,7 +1,7 @@
 <template>
     <div class="app-drag" :style="style">
         <div class="background" />
-        <div class="text" onselectstart="return false" :style="{ color: textColor }">
+        <div class="text" onselectstart="return false">
             <slot name="content">
                 {{ content }}
             </slot>
@@ -36,7 +36,7 @@ export default {
             required: true,
             default: false
         },
-        icon: { //滑块图标
+        icon: { //滑块的图标
             type: [String],
             default: null
         },
@@ -52,6 +52,18 @@ export default {
             type: [String],
             default: `请拖动滑块解锁`
         },
+        successContent: { //成功后的滑块的文字
+            type: [String],
+            default: `验证通过`
+        },
+        contentColor: { //初始滑块轨道的文字颜色
+            type: [String],
+            default: `#fff`
+        },
+        successColor: { //成功后的滑块的文字颜色
+            type: [String],
+            default: `#fff`
+        },
         height: { //高度
             type: [String],
             default: `40px`
@@ -60,14 +72,34 @@ export default {
             type: [String],
             default: `40px`
         },
-        background: { //高度
+        background: { //初始背景
             type: [String],
             default: `#e8e8e8`
         },
-        textColor: { //滑块的文字颜色
+        textColor: { //初始滑块的文字颜色
             type: [String],
-            default: `#fff`
-        }
+            default: `#f00`
+        },
+
+        sliderBg: { //滑动后背景(原生的background 属性可以为16进制和rgb或标准颜色值)
+            type: [String],
+            default: `#75CDF9`
+        },
+
+        sliderColor: { //滑块的文字颜色(原生的color 属性可以为16进制和rgb或标准颜色值)
+            type: [String],
+            default: `#000`
+        },
+
+        sliderSuccessColor: { //滑动后滑块的文字颜色(原生的color 属性可以为16进制和rgb或标准颜色值)
+            type: [String],
+            default: `#f00`
+        },
+
+        successBg: { //滑动成功后背景(原生的background 属性可以为16进制和rgb或标准颜色值)
+            type: [String],
+            default: `lightgreen`
+        },
     },
     watch:{
         isLock(v){  //重置样式
@@ -85,11 +117,13 @@ export default {
     },
     mounted() {
         this.init();
-        window.onresize = ()=>{
-            debounce(()=>{
-                this.init();
-            },120);
-        };
+        if(window){
+            window.onresize = ()=>{
+                debounce(()=>{
+                    this.init();
+                },120);
+            };
+        }
     },
     methods: {
 
@@ -112,10 +146,15 @@ export default {
             let success =  this.inactiveValue;//是否通过验证的标志
             // 初始化的时候 清除所有属性
             slider.style.transition = null;
+            if(this.icon) slider.innerHTML = this.icon;
             background.style.transition = null;
+            background.style.background = this.sliderBg;
             slider.style.left = 0 + 'px';
             background.style.width = 0 + 'px';
             text.innerHTML = this.content;
+            text.style.color = this.contentColor;
+            slider.style.color = this.sliderColor;
+            
             //二、给滑块注册鼠标按下事件
             slider.onmousedown = (event) => {
                 //1.鼠标按下之前必须清除掉后面设置的过渡属性
@@ -147,11 +186,10 @@ export default {
                     //如果鼠标的水平移动距离 = 滑动成功的宽度
                     if (offsetX == distance) {
                         //1.设置滑动成功后的样式
-                        text.innerHTML = '验证通过';
-                        text.style.color = '#fff';
-                        slider.innerHTML = '&radic;';
-                        slider.style.color = 'green';
-                        background.style.backgroundColor = 'lightgreen';
+                        text.innerHTML = this.successContent;
+                        text.style.color = this.successColor;
+                        slider.style.color = this.sliderSuccessColor;
+                        background.style.background = this.successBg;
 
                         //2.设置滑动成功后的状态
                         success = this.activeValue;
@@ -215,11 +253,10 @@ export default {
                     //如果鼠标的水平移动距离 = 滑动成功的宽度
                     if (offsetX == distance) {
                         //1.设置滑动成功后的样式
-                        text.innerHTML = '验证通过';
-                        text.style.color = '#fff';
-                        slider.innerHTML = '&radic;';
-                        slider.style.color = 'green';
-                        background.style.backgroundColor = 'lightgreen';
+                        text.innerHTML = this.successContent;
+                        text.style.color = this.successColor;
+                        slider.style.color = this.sliderSuccessColor;
+                        background.style.background = this.successBg;
                         //2.设置滑动成功后的状态
                         success = this.activeValue;
                         //成功后，清除掉鼠标按下事件和移动事件（因为移动时并不会涉及到鼠标松开事件）
@@ -272,7 +309,6 @@ export default {
     width: 2.5rem;
     height: 100%;
     position: absolute;
-    background-color: #75CDF9;
 }
 
 .text {
@@ -294,5 +330,6 @@ export default {
     background-color: #fff;
     user-select: none;
     color: #666;
+    cursor: pointer;
 }
 </style>
